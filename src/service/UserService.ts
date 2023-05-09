@@ -1,15 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { UserDao } from '../dao/UserDao';
+import { Inject, Injectable } from "@nestjs/common";
 import { User } from "../entities/User";
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userDao: UserDao) {}
-  getList(): Array<User> {
-    return this.userDao.getList();
+
+  getList(): Promise<Array<User>> {
+    return  User.find();
   }
 
   add(user: User) {
-    return this.userDao.add(user);
+    return User.save(user);
   }
 }
