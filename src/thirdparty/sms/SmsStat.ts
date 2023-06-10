@@ -7,24 +7,23 @@ import {
 } from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 
-@Entity('t_user')
+/**
+ * 通用的短信发送统计表
+ */
+@Entity('t_sms_stat')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  name: string;
-  @Column()
-  age: number;
-  @Column()
   tel: string;
+  /**
+   * 发送场景,1注册，2验证密码
+   */
   @Column()
-  password: string;
+  sense: number;
+  /**
+   * 发送日期
+   */
   @Column()
-  ctime: string;
-  @Column()
-  vipLevel: number;
-  @Column()
-  vipExpried: string;
-  @Column()
-  remainCount: number;
+  day: string;
 }
