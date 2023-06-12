@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import AlipaySdk, { AlipaySdkCommonResult } from 'alipay-sdk';
 import { randomBytes } from 'crypto';
-import { PaymentService } from '../../core/PaymentService';
+import { PaymentService } from '../core/PaymentService';
 @Injectable()
 class AlipayService {
   private alipaySdk: AlipaySdk;

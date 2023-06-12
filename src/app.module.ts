@@ -7,6 +7,7 @@ import { MulterModule } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import dayjs = require('dayjs');
 import * as nuid from 'nuid';
+import {GptModule} from "./module/gpt/GptModule";
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import * as nuid from 'nuid';
       }),
     }),
     UsersModule,
+    GptModule
   ],
   controllers: [AppController],
   providers: [AppService],

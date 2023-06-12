@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Payment } from './Payment';
-import { AlipayCallbackBean } from '../payment/alipay/bean/AlipayCallbackBean';
+import { AlipayCallbackBean } from '../alipay/bean/AlipayCallbackBean';
 
 @Injectable()
 export class PaymentService {

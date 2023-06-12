@@ -5,7 +5,6 @@ import {
   PrimaryGeneratedColumn,
   Repository,
 } from 'typeorm';
-import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 
 /**\
  * 通用的支付记录表
