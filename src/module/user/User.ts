@@ -17,14 +17,4 @@ export class User extends BaseEntity {
   age: number;
   @Column()
   tel: string;
-  @Column()
-  password: string;
-  @Column()
-  ctime: string;
-  @Column()
-  vipLevel: number;
-  @Column()
-  vipExpried: string;
-  @Column()
-  remainCount: number;
 }

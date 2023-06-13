@@ -1,13 +1,15 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './UserService';
 import { User } from './User';
+import { Page } from '../../core/bean/Page';
+import { UserPo } from './UserPo';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get('getList')
-  getList(): Promise<Array<User>> {
-    return this.userService.getList();
+  getList(@Body() po: UserPo): Promise<Page> {
+    return this.userService.getList(po);
   }
 
   @Post('add')

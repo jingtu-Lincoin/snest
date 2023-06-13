@@ -1,7 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Body, Inject, Injectable } from '@nestjs/common';
 import { User } from './User';
 import RedisUtil from '../../util/RedisUtil';
 import TimeUtil from '../../util/TimeUtil';
+import { UserPo } from './UserPo';
+import { Like } from 'typeorm';
+import { Page } from '../../core/bean/Page';
 
 @Injectable()
 export class UserService {
@@ -10,8 +13,21 @@ export class UserService {
   //   private usersRepository: Repository<User>
   // ) {}
 
-  getList(): Promise<Array<User>> {
-    return User.find();
+  async getList(po: UserPo): Promise<Page> {
+    console.log('po ' + JSON.stringify(po));
+    const page = new Page();
+    const query = User.createQueryBuilder('user');
+    if (po.name) {
+      query.where('user.name like :name', { name: `%${po.name}%` });
+    }
+    query.skip(po.page * po.pageSize);
+    query.take(po.pageSize);
+    const result = query.getManyAndCount();
+    await result.then((value) => {
+      page.data = value[0];
+      page.total = value[1];
+    });
+    return page;
   }
 
   add(user: User) {
