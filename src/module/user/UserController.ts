@@ -1,35 +1,65 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './UserService';
 import { User } from './User';
-import { Page } from '../../core/bean/Page';
 import { UserPo } from './UserPo';
+import { ResultInfo } from '../../core/bean/ResultInfo';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Get('getList')
-  getList(@Body() po: UserPo): Promise<Page> {
-    return this.userService.getList(po);
+  @Post('getList')
+  async getList(@Body() po: UserPo): Promise<ResultInfo> {
+    console.log('po ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.getList(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
   }
 
   @Post('add')
-  add(@Body() user: User): Promise<User> {
+  async add(@Body() user: User): Promise<ResultInfo> {
     console.log('user ' + JSON.stringify(user));
-    return this.userService.add(user);
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.add(user);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
   }
 
-  @Get('getToken')
-  getToken(): any {
-    return this.userService.getToken();
+  @Post('remove')
+  async remove(@Body() user: User): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(user));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.remove(user.id);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
   }
 
-  @Get('getTokenFromList')
-  getTokenFromList(): any {
-    return this.userService.getTokenFromList();
-  }
-
-  @Get('addRecord')
-  addRecord(): any {
-    return this.userService.addRecord();
+  @Post('detail')
+  async detail(@Body() user: User): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(user));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.get(user.id);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
   }
 }

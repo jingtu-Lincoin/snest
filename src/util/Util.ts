@@ -51,4 +51,8 @@ export default class Util {
     const second = dateObj.getSeconds();
     return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
   }
+
+  static getPageCount(total: number, pageSize: number) {
+    return Math.ceil(total / pageSize);
+  }
 }

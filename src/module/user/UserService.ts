@@ -5,6 +5,7 @@ import TimeUtil from '../../util/TimeUtil';
 import { UserPo } from './UserPo';
 import { Like } from 'typeorm';
 import { Page } from '../../core/bean/Page';
+import Util from '../../util/Util';
 
 @Injectable()
 export class UserService {
@@ -16,16 +17,18 @@ export class UserService {
   async getList(po: UserPo): Promise<Page> {
     console.log('po ' + JSON.stringify(po));
     const page = new Page();
+    page.page = po.page;
+    page.pageSize = po.pageSize;
     const query = User.createQueryBuilder('user');
     if (po.name) {
       query.where('user.name like :name', { name: `%${po.name}%` });
     }
-    query.skip(po.page * po.pageSize);
+    query.skip((po.page - 1) * po.pageSize);
     query.take(po.pageSize);
     const result = query.getManyAndCount();
     await result.then((value) => {
-      page.data = value[0];
-      page.total = value[1];
+      page.list = value[0];
+      page.pageCount = Util.getPageCount(value[1], po.pageSize);
     });
     return page;
   }
@@ -33,36 +36,15 @@ export class UserService {
   add(user: User) {
     return User.save(user);
   }
-
-  async getToken() {
-    const obj = await new RedisUtil().get('123456');
-    if (obj) {
-      const jsonObj = JSON.parse(obj);
-      if (new TimeUtil().expried(jsonObj['etime'])) {
-        console.log('token ' + jsonObj['token'] + ' expired');
-      } else {
-        console.log('token ' + jsonObj['token'] + ' not expired');
-      }
-    }
-    return obj;
+  remove(id: number) {
+    return User.delete(id);
   }
 
-  async getTokenFromList() {
-    const token = await new RedisUtil().getFromList(
-      'token_ip_records',
-      'token',
-      '1234567',
-    );
-    console.log('token ' + token);
-    return token;
-  }
-
-  addRecord() {
-    const record = {
-      token: '1234568',
-      ip: '192.168.1.102',
-      count: 5,
-    };
-    new RedisUtil().addToList('token_ip_records', record, 'token');
+  async get(id: number) {
+    return User.findOne({
+      where: {
+        id: id,
+      },
+    });
   }
 }
