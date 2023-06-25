@@ -17,6 +17,7 @@ export class GptController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
   async upload(@UploadedFile() file: Express.Multer.File, @Body() po: GptPo) {
+    console.log('po ' + JSON.stringify(po));
     return this.gptService.upload(file, po.userId);
   }
 
@@ -34,7 +35,7 @@ export class GptController {
     return info;
   }
 
-  @Post('getList')
+  @Post('loadGptData')
   async loadGptData(@Body() po: GptPo): Promise<ResultInfo> {
     console.log('po ' + JSON.stringify(po));
     const info = new ResultInfo();

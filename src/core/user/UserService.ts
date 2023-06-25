@@ -12,7 +12,6 @@ export class UserService {
   //   @InjectRepository(User)
   //   private usersRepository: Repository<User>
   // ) {}
-  @Inject()
   smsCodeService = new SmsCodeService();
 
   async getList(po: UserPo): Promise<Page> {
@@ -37,6 +36,8 @@ export class UserService {
   add(user: User) {
     user.ctime = TimeUtil.getNow();
     user.token = Util.getUUID();
+    user.level = '0';
+    user.credits = 0;
     return User.save(user);
   }
   remove(id: number) {
@@ -55,11 +56,11 @@ export class UserService {
    * 更新用户积分
    * @param number
    */
-  updateUserCredit(id: number, credit: number) {
+  updateUserCredit(id: number, credits: number) {
     const user = this.get(id);
     user.then((value) => {
       if (value) {
-        value.credit += credit;
+        value.credits += credits;
         User.save(value);
       }
     });
@@ -101,5 +102,9 @@ export class UserService {
     } else {
       return null;
     }
+  }
+
+  async getValidCode(po: UserPo) {
+    return this.smsCodeService.sendSmsCode(po.tel);
   }
 }

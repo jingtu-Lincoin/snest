@@ -2,9 +2,11 @@ import { Body, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SmsCode } from './SmsCode';
 import TimeUtil from '../../../util/TimeUtil';
+import Util from '../../../util/Util';
+import { TxSmsSender } from '../txsms/TxSmsSender';
 
-@Injectable()
 export class SmsCodeService {
+  txSmsSender = new TxSmsSender();
   getByTel(tel: string): Promise<SmsCode | null> {
     return SmsCode.findOne({
       where: {
@@ -34,5 +36,13 @@ export class SmsCodeService {
     } else {
       return false;
     }
+  }
+
+  async sendSmsCode(tel: string): Promise<SmsCode> {
+    const code = Util.randomNumbers(4);
+    //await this.txSmsSender.sendValidCode(tel, code);
+    const result = await this.addSmsCode(tel, code);
+    console.log('result ' + JSON.stringify(result));
+    return result;
   }
 }

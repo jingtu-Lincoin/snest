@@ -28,6 +28,7 @@ export class TxSmsSender {
       PhoneNumberSet: [`+86${tel}`],
       TemplateID: '1020',
       SmsSdkAppid: process.env.TX_SMS_SDK_APPID,
+      code,
     };
     const result = await this.client.request('SendSms', params);
     console.log(result);

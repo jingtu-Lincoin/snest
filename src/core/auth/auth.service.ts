@@ -7,10 +7,7 @@ import { UserPo } from '../user/UserPo';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private userService: UserService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private jwtService: JwtService) {}
 
   async validateUser(userPo: any): Promise<any> {
     const tel = userPo.tel;

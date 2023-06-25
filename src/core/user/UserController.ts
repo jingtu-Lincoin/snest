@@ -90,4 +90,18 @@ export class UserController {
     }
     return info;
   }
+
+  @Post('getValidCode')
+  async getValidCode(@Body() po: UserPo): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.getValidCode(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
 }

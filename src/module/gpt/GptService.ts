@@ -35,6 +35,10 @@ export class GptService {
   }
 
   private async _loadGptData(text: string) {
+    if (text.length > 1200) {
+      text = text.substring(text.length - 1200);
+    }
+    console.log('发送的内容为 ' + text);
     const mMsg = [{ role: 'user', content: `针对文件提3个问题: ${text}` }];
     const mModel = process.env.AZURE_OPENAI_DeploymentName!;
     const gptResponse = await this.mOpenAI.getChatCompletions(mModel, mMsg);
@@ -73,12 +77,20 @@ export class GptService {
   async loadGptData(po: GptPo) {
     const result = new ResultInfo();
     const record = await GptRecord.findOne({ where: { id: po.recordId } });
-    if (record) {
-      const data = await this._loadGptData(po.prompt + record.origin);
-      if (data) {
-        result.data = data;
-        result.code = 200;
-        this.userService.updateUserCredit(record.userId, -1);
+    if (record && record.content === null) {
+      const user = await this.userService.get(record.userId);
+      if (user && user.credits > 0) {
+        const data = await this._loadGptData(
+          po.style + ' ' + po.difficulty + record.origin,
+        );
+        if (data) {
+          result.data = data;
+          result.code = 200;
+          this.userService.updateUserCredit(record.userId, -1);
+        }
+      } else {
+        result.code = 1;
+        result.message = '积分不足';
       }
     }
     return result;

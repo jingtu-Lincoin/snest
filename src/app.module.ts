@@ -10,6 +10,10 @@ import * as nuid from 'nuid';
 import { GptModule } from './module/gpt/GptModule';
 import { AuthModule } from './core/auth/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { GptRecord } from './module/gpt/GptRecord';
+import { SmsCode } from './thirdparty/sms/core/SmsCode';
+import { User } from './core/user/User';
+import { SmsStat } from "./thirdparty/sms/core/SmsStat";
 
 @Module({
   imports: [
@@ -21,6 +25,8 @@ import { ScheduleModule } from '@nestjs/schedule';
       password: 'pass',
       database: 'smartgpt',
       autoLoadEntities: true,
+      synchronize: true,
+      entities: [User, GptRecord, SmsCode, SmsStat],
     }),
     MulterModule.register({
       storage: diskStorage({

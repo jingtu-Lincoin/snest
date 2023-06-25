@@ -11,7 +11,7 @@ import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
  * 通用的短信发送统计表
  */
 @Entity('t_sms_stat')
-export class User extends BaseEntity {
+export class SmsStat extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
