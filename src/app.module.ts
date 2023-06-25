@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './module/app/AppController';
 import { AppService } from './module/app/AppService';
-import { UsersModule } from './module/user/UsersModule';
+import { UserModule } from './core/user/UserModule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MulterModule } from "@nestjs/platform-express";
-import { diskStorage } from "multer";
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import dayjs = require('dayjs');
 import * as nuid from 'nuid';
-import {GptModule} from "./module/gpt/GptModule";
+import { GptModule } from './module/gpt/GptModule';
+import { AuthModule } from './core/auth/auth.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -17,8 +19,8 @@ import {GptModule} from "./module/gpt/GptModule";
       port: 3306,
       username: 'root',
       password: 'pass',
-      database: 'test',
-      autoLoadEntities: true
+      database: 'smartgpt',
+      autoLoadEntities: true,
     }),
     MulterModule.register({
       storage: diskStorage({
@@ -31,8 +33,10 @@ import {GptModule} from "./module/gpt/GptModule";
         },
       }),
     }),
-    UsersModule,
-    GptModule
+    ScheduleModule.forRoot(),
+    UserModule,
+    GptModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

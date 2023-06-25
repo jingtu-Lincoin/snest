@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import Util from "./Util";
+import Util from './Util';
 export default class RedisUtil {
   redis = new Redis();
 
@@ -49,7 +49,7 @@ export default class RedisUtil {
       this.redis.get(redisKey).then((result) => {
         if (result != null) {
           const resultArray = JSON.parse(result);
-          new Util().arrRemove(resultArray, record, field);
+          Util.arrRemove(resultArray, record, field);
           resultArray.push(record);
           this.redis.set(redisKey, JSON.stringify(resultArray));
         } else {

@@ -49,12 +49,40 @@ export class UserController {
     return info;
   }
 
-  @Post('detail')
-  async detail(@Body() user: User): Promise<ResultInfo> {
+  @Post('getUserInfo')
+  async getUserInfo(@Body() user: User): Promise<ResultInfo> {
     console.log('user ' + JSON.stringify(user));
     const info = new ResultInfo();
     try {
       info.data = await this.userService.get(user.id);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('loginWithPassword')
+  async loginWithPassword(@Body() user: User): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(user));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.loginWithPassword(user);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('loginWithPassword')
+  async loginWithValidCode(@Body() user: User): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(user));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.loginWithValidCode(user);
       info.code = 200;
     } catch (e) {
       info.code = 1;
