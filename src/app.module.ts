@@ -13,7 +13,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { GptRecord } from './module/gpt/GptRecord';
 import { SmsCode } from './thirdparty/sms/core/SmsCode';
 import { User } from './core/user/User';
-import { SmsStat } from "./thirdparty/sms/core/SmsStat";
+import { SmsStat } from './thirdparty/sms/core/SmsStat';
+import { Payment } from './thirdparty/payment/core/Payment';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { SmsStat } from "./thirdparty/sms/core/SmsStat";
       database: 'smartgpt',
       autoLoadEntities: true,
       synchronize: true,
-      entities: [User, GptRecord, SmsCode, SmsStat],
+      entities: [User, GptRecord, SmsCode, SmsStat, Payment],
     }),
     MulterModule.register({
       storage: diskStorage({

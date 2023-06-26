@@ -40,7 +40,7 @@ export class GptService {
     }
     console.log('发送的内容为 ' + text);
     const mMsg = [{ role: 'user', content: `针对文件提3个问题: ${text}` }];
-    const mModel = process.env.AZURE_OPENAI_DeploymentName!;
+    const mModel = process.env.AZURE_OPENAI_DeploymentName + '';
     const gptResponse = await this.mOpenAI.getChatCompletions(mModel, mMsg);
     return gptResponse.choices.map((item) => item.message!.content).join('');
   }

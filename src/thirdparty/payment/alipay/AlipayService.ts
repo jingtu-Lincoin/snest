@@ -2,11 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import AlipaySdk, { AlipaySdkCommonResult } from 'alipay-sdk';
 import { randomBytes } from 'crypto';
 import { PaymentService } from '../core/PaymentService';
-@Injectable()
-class AlipayService {
+export class AlipayService {
   private alipaySdk: AlipaySdk;
-  @Inject()
-  private paymentService: PaymentService;
+  paymentService: PaymentService = new PaymentService();
+  private notifyUrl = 'http://www.51zfgx.com:8080/alipay/payNotify';
+  private returnUrl = 'http://www.51zfgx.com:8080/paySuccess';
 
   public initSdk() {
     this.alipaySdk = new AlipaySdk({
@@ -22,31 +22,29 @@ class AlipayService {
     });
   }
 
-  public async payForPc() {
+  public async payForPc(opts: any) {
     this.initSdk();
-    const outTradeNo = randomBytes(16).toString('hex');
-    console.log('outTradeNo ' + outTradeNo);
-    return await this._getPcPaymentResult();
+    return await this._getPcPaymentResult(opts);
   }
 
-  private async _getPcPaymentResult() {
-    const outTradeNo = randomBytes(16).toString('hex');
+  private async _getPcPaymentResult(opts: any) {
     const bizContent = {
-      out_trade_no: 'ALIPfdf1211sdfsd12gfddsgs3',
+      out_trade_no: opts.outTradeNo,
       product_code: 'FAST_INSTANT_TRADE_PAY',
-      subject: 'abc',
+      subject: opts.subject,
       body: '234',
-      total_amount: '0.01',
+      total_amount: opts.totalAmount / 100,
     };
+
+    console.log('bizContent ' + JSON.stringify(bizContent));
 
     // 支付页面接口，返回 html 代码片段，内容为 Form 表单
     const result = this.alipaySdk.pageExec('alipay.trade.page.pay', {
       method: 'POST',
       bizContent,
-      returnUrl: 'https://www.taobao.com',
+      returnUrl: this.returnUrl,
     });
     console.log('result ' + JSON.stringify(result));
     return result;
   }
-
 }

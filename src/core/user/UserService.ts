@@ -5,6 +5,12 @@ import { Page } from '../../core/bean/Page';
 import Util from '../../util/Util';
 import TimeUtil from '../../util/TimeUtil';
 import { SmsCodeService } from '../../thirdparty/sms/core/SmsCodeService';
+import * as process from 'process';
+import { AlipayService } from '../../thirdparty/payment/alipay/AlipayService';
+import { ResultInfo } from '../bean/ResultInfo';
+import { AlipayCallbackBean } from '../../thirdparty/payment/alipay/bean/AlipayCallbackBean';
+import { PaymentService } from '../../thirdparty/payment/core/PaymentService';
+import { Payment } from '../../thirdparty/payment/core/Payment';
 
 @Injectable()
 export class UserService {
@@ -13,6 +19,8 @@ export class UserService {
   //   private usersRepository: Repository<User>
   // ) {}
   smsCodeService = new SmsCodeService();
+  alipayService = new AlipayService();
+  paymentService = new PaymentService();
 
   async getList(po: UserPo): Promise<Page> {
     console.log('po ' + JSON.stringify(po));
@@ -106,5 +114,46 @@ export class UserService {
 
   async getValidCode(po: UserPo) {
     return this.smsCodeService.sendSmsCode(po.tel);
+  }
+
+  async recharge(po: UserPo) {
+    const info = new ResultInfo();
+    const params = {
+      totalAmount: process.env.USER_RECHARGE_MONEY,
+      outTradeNo: Util.getUUID(),
+      subject: '用户充值',
+    };
+    this.createPayment(params, po);
+    info.data = await this.alipayService.payForPc(params);
+    info.code = 200;
+    return info;
+  }
+
+  async zfbCallback(po: AlipayCallbackBean) {
+    const payment = await this.paymentService.getByOutTradeNo(po.out_trade_no);
+    if (payment) {
+      payment.payStatus = '2';
+      payment.payTime = TimeUtil.getNow();
+      this.paymentService.add(payment);
+      const user = await this.get(payment.userId);
+      if (user) {
+        user.level = '1';
+        this.add(user);
+      }
+    }
+  }
+
+  private createPayment(
+    params: { totalAmount: any; outTradeNo: string },
+    po: UserPo,
+  ) {
+    const payment = new Payment();
+    payment.outTradeNo = params.outTradeNo;
+    payment.totalAmount = params.totalAmount;
+    payment.payStatus = '1';
+    payment.channel = 'alipay';
+    payment.userId = po.id;
+    payment.ctime = TimeUtil.getNow();
+    this.paymentService.add(payment);
   }
 }

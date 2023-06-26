@@ -3,6 +3,7 @@ import { UserService } from './UserService';
 import { User } from './User';
 import { UserPo } from './UserPo';
 import { ResultInfo } from '../../core/bean/ResultInfo';
+import { AlipayCallbackBean } from "../../thirdparty/payment/alipay/bean/AlipayCallbackBean";
 
 @Controller('user')
 export class UserController {
@@ -97,6 +98,34 @@ export class UserController {
     const info = new ResultInfo();
     try {
       info.data = await this.userService.getValidCode(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('recharge')
+  async recharge(@Body() po: UserPo): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.recharge(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('zfbCallback')
+  async zfbCallback(@Body() po: AlipayCallbackBean): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.zfbCallback(po);
       info.code = 200;
     } catch (e) {
       info.code = 1;

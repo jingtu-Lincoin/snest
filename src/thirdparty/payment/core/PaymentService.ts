@@ -28,4 +28,10 @@ export class PaymentService {
     }
     return 'success';
   }
+
+  async getByOutTradeNo(out_trade_no: string) {
+    return Payment.findOne({
+      where: { outTradeNo: out_trade_no },
+    });
+  }
 }
