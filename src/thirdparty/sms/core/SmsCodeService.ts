@@ -40,7 +40,7 @@ export class SmsCodeService {
 
   async sendSmsCode(tel: string): Promise<SmsCode> {
     const code = Util.randomNumbers(4);
-    //await this.txSmsSender.sendValidCode(tel, code);
+    await this.txSmsSender.sendValidCode(tel, code);
     const result = await this.addSmsCode(tel, code);
     console.log('result ' + JSON.stringify(result));
     return result;

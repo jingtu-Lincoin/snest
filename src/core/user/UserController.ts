@@ -64,6 +64,20 @@ export class UserController {
     return info;
   }
 
+  @Post('detail')
+  async detail(@Body() user: User): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(user));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.get(user.id);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
   @Post('loginWithPassword')
   async loginWithPassword(@Body() user: User): Promise<ResultInfo> {
     console.log('user ' + JSON.stringify(user));
@@ -78,7 +92,7 @@ export class UserController {
     return info;
   }
 
-  @Post('loginWithPassword')
+  @Post('loginWithValidCode')
   async loginWithValidCode(@Body() user: User): Promise<ResultInfo> {
     console.log('user ' + JSON.stringify(user));
     const info = new ResultInfo();
@@ -126,6 +140,20 @@ export class UserController {
     const info = new ResultInfo();
     try {
       info.data = await this.userService.zfbCallback(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('weixinLogin')
+  async weixinLogin(@Body() po: UserPo): Promise<ResultInfo> {
+    console.log('user ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.userService.weixinLogin(po);
       info.code = 200;
     } catch (e) {
       info.code = 1;

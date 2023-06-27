@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@azure/openai": "^1.0.0-beta.2",
+    "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^10.1.0",
@@ -42,7 +43,7 @@
     "pdfjs-dist": "^3.7.107",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "tencentcloud-sdk-nodejs": "^4.0.626",
+    "tencentcloud-sdk-nodejs": "^4.0.629",
     "typeorm": "^0.3.15"
   },
   "devDependencies": {

@@ -11,6 +11,7 @@ import { ResultInfo } from '../bean/ResultInfo';
 import { AlipayCallbackBean } from '../../thirdparty/payment/alipay/bean/AlipayCallbackBean';
 import { PaymentService } from '../../thirdparty/payment/core/PaymentService';
 import { Payment } from '../../thirdparty/payment/core/Payment';
+import { WeiXinLoginService } from '../../thirdparty/login/weixin/WeiXinLoginService';
 
 @Injectable()
 export class UserService {
@@ -21,6 +22,7 @@ export class UserService {
   smsCodeService = new SmsCodeService();
   alipayService = new AlipayService();
   paymentService = new PaymentService();
+  weiXinLoginService = new WeiXinLoginService();
 
   async getList(po: UserPo): Promise<Page> {
     console.log('po ' + JSON.stringify(po));
@@ -45,7 +47,7 @@ export class UserService {
     user.ctime = TimeUtil.getNow();
     user.token = Util.getUUID();
     user.level = '0';
-    user.credits = 0;
+    user.credits = 5;
     return User.save(user);
   }
   remove(id: number) {
@@ -105,11 +107,18 @@ export class UserService {
     query.where('user.tel = :tel', { tel: user.tel });
     const result = await query.getOne();
     if (result) {
-      this.updateUserToken(result);
-      return result;
+      const check = await this.smsCodeService.checkSmsCode(
+        user.tel,
+        user.validCode,
+      );
+      if (check) {
+        this.updateUserToken(result);
+        return result;
+      }
     } else {
       return null;
     }
+    return null;
   }
 
   async getValidCode(po: UserPo) {
@@ -138,7 +147,8 @@ export class UserService {
       const user = await this.get(payment.userId);
       if (user) {
         user.level = '1';
-        this.add(user);
+        user.credits = 20;
+        User.save(user);
       }
     }
   }
@@ -155,5 +165,34 @@ export class UserService {
     payment.userId = po.id;
     payment.ctime = TimeUtil.getNow();
     this.paymentService.add(payment);
+  }
+
+  async weixinLogin(po: UserPo) {
+    const userInfo = await this.weiXinLoginService.weixinLogin(po.code);
+    if (userInfo) {
+      let user = await this.findByOpenId(userInfo.openid);
+      if (user) {
+        this.updateUserToken(user);
+        return user;
+      } else {
+        user = new User();
+        user.openid = userInfo.openid;
+        user.name = userInfo.nickname;
+        user.avatarUrl = userInfo.headimgurl;
+        user.ctime = TimeUtil.getNow();
+        user.token = Util.getUUID();
+        user.credits = 5;
+        user.level = '0';
+        return User.save(user);
+      }
+    }
+  }
+
+  private findByOpenId(openid: string) {
+    return User.findOne({
+      where: {
+        openid,
+      },
+    });
   }
 }

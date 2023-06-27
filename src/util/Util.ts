@@ -63,4 +63,22 @@ export default class Util {
       Math.random().toString(36).substr(3, 10)
     );
   }
+
+  /**
+   * 给url拼接参数
+   * @param url
+   * @param params
+   */
+  static spliceUrlParams(url: string, params: any) {
+    const keys = Object.keys(params);
+    let result = url;
+    keys.map((key, index) => {
+      if (index === 0) {
+        result += `?${key}=${params[key]}`;
+      } else {
+        result += `&${key}=${params[key]}`;
+      }
+    });
+    return result;
+  }
 }

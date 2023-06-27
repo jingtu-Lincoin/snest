@@ -35,6 +35,10 @@ export class User extends BaseEntity {
   token: string; //token
   @Column({ nullable: true })
   ctime: string; //创建时间
+  @Column({ nullable: true })
+  openid: string; //微信openid
+  @Column({ nullable: true })
+  avatarUrl: string; //微信头像
 
   validCode: string; //接收前端传过来的验证码，不保存到数据库
 }

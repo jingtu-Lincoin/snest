@@ -15,6 +15,7 @@ import { SmsCode } from './thirdparty/sms/core/SmsCode';
 import { User } from './core/user/User';
 import { SmsStat } from './thirdparty/sms/core/SmsStat';
 import { Payment } from './thirdparty/payment/core/Payment';
+import { PaymentModule } from "./thirdparty/payment/core/PaymentModule";
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { Payment } from './thirdparty/payment/core/Payment';
     UserModule,
     GptModule,
     AuthModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

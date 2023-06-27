@@ -5,8 +5,7 @@ import { PaymentService } from '../core/PaymentService';
 export class AlipayService {
   private alipaySdk: AlipaySdk;
   paymentService: PaymentService = new PaymentService();
-  private notifyUrl = 'http://www.51zfgx.com:8080/alipay/payNotify';
-  private returnUrl = 'http://www.51zfgx.com:8080/paySuccess';
+  private returnUrl = 'http://clientdev.jingtu.info/#/paySuccess';
 
   public initSdk() {
     this.alipaySdk = new AlipaySdk({
