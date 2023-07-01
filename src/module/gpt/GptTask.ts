@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { UserService } from "../../core/user/UserService";
+import { UserService } from '../../core/user/UserService';
 
 @Injectable()
 export class GptTask {
@@ -15,6 +15,5 @@ export class GptTask {
     this.logger.debug('before userService.initUserCredit');
     this.userService.initUserCredit();
     this.logger.debug('after userService.initUserCredit');
-
   }
 }
