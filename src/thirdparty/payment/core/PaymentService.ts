@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Payment } from './Payment';
 import { AlipayCallbackBean } from '../alipay/bean/AlipayCallbackBean';
 import { PaymentPo } from './PaymentPo';
-import { Page } from "../../../core/bean/Page";
-import Util from "../../../util/Util";
+import { Page } from '../../../core/bean/Page';
+import Util from '../../../util/Util';
 
 @Injectable()
 export class PaymentService {
@@ -14,7 +14,9 @@ export class PaymentService {
     page.pageSize = po.pageSize;
     const query = Payment.createQueryBuilder('payment');
     if (po.outTradeNo) {
-      query.where('payment.outTradeNo like :outTradeNo', { outTradeNo: `%${po.outTradeNo}%` });
+      query.where('payment.outTradeNo like :outTradeNo', {
+        outTradeNo: `%${po.outTradeNo}%`,
+      });
     }
     query.skip((po.page - 1) * po.pageSize);
     query.take(po.pageSize);

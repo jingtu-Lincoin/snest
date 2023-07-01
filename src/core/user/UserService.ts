@@ -148,6 +148,7 @@ export class UserService {
       if (user) {
         user.level = '1';
         user.credits = 20;
+        user.rechargeCount += 1;
         User.save(user);
       }
     }
@@ -163,6 +164,7 @@ export class UserService {
     payment.payStatus = '1';
     payment.channel = 'alipay';
     payment.userId = po.id;
+    payment.userName = po.name;
     payment.ctime = TimeUtil.getNow();
     this.paymentService.add(payment);
   }
@@ -193,6 +195,20 @@ export class UserService {
       where: {
         openid,
       },
+    });
+  }
+
+  initUserCredit() {
+    const allUser = User.find();
+    allUser.then((value) => {
+      value.forEach((user) => {
+        if(user.level === '0'){
+          user.credits = 5;
+        }else if(user.level === '1'){
+          user.credits = 20;
+        }
+        User.save(user);
+      });
     });
   }
 }

@@ -40,5 +40,7 @@ export class Payment extends BaseEntity {
   @Column({ nullable: true })
   userId: number;
   @Column({ nullable: true })
+  userName: string;
+  @Column({ nullable: true })
   channel: string; //支付渠道,alipay支付宝,wxpay微信
 }

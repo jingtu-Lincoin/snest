@@ -17,6 +17,8 @@ export class GptRecord extends BaseEntity {
   @Column()
   userId: number;
   @Column({ nullable: true })
+  userName: string;
+  @Column({ nullable: true })
   tel: string;
   @Column({ nullable: true })
   ctime: string;

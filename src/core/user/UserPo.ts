@@ -5,4 +5,5 @@ export class UserPo extends BasePo {
   password: string;
   validCode: string;
   code: string; //微信登录前台返回的code
+  name: string;
 }

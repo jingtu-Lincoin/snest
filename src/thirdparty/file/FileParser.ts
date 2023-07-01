@@ -17,7 +17,7 @@ export default class FileParser {
 
   private static async readTextFromPdf(file: Express.Multer.File) {
     let text = '';
-    const loadingTask = pdfjsLib.getDocument(file.buffer);
+    const loadingTask = pdfjsLib.getDocument(file.path);
     await loadingTask.promise.then(async (pdf: any) => {
       const maxPages = pdf.numPages;
       for (let j = 1; j <= maxPages; j++) {
@@ -34,7 +34,7 @@ export default class FileParser {
 
   private static async readTextFromDocx(file: Express.Multer.File) {
     let text = '';
-    await extractRawText({ buffer: file.buffer }).then(function (result) {
+    await extractRawText({ path: file.path }).then(function (result) {
       text = result.value; // The raw text
       console.log('text1', text);
     });

@@ -26,6 +26,7 @@ export class GptService {
     file: Express.Multer.File,
     userid: number,
   ): Promise<UploadResult> {
+    console.log('file ' + file.path + ' originalname ' + file.originalname);
     const info = new UploadResult();
     const text = await FileParser.readText(file);
     if (text) {
@@ -60,7 +61,7 @@ export class GptService {
     const page = new Page();
     page.page = po.page;
     page.pageSize = po.pageSize;
-    const query = User.createQueryBuilder('gptRecord');
+    const query = GptRecord.createQueryBuilder('gptRecord');
     if (po.userId) {
       query.where('gptRecord.userId = :userId', { userId: po.userId });
     }
@@ -84,9 +85,13 @@ export class GptService {
           po.style + ' ' + po.difficulty + record.origin,
         );
         if (data) {
+          record.content = data;
+          await GptRecord.save(record);
+          user.credits--;
+          user.generateCount++;
+          User.save(user);
           result.data = data;
           result.code = 200;
-          this.userService.updateUserCredit(record.userId, -1);
         }
       } else {
         result.code = 1;
