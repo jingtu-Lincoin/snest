@@ -107,16 +107,17 @@ export class UserService {
     query.where('user.tel = :tel', { tel: user.tel });
     const result = await query.getOne();
     if (result) {
-      const check = await this.smsCodeService.checkSmsCode(
-        user.tel,
-        user.validCode,
-      );
-      if (check) {
-        this.updateUserToken(result);
-        return result;
-      }
+      this.updateUserToken(result);
+      return result;
     } else {
-      return null;
+      const newUser = new User();
+      newUser.tel = user.tel;
+      newUser.name = user.tel;
+      newUser.ctime = TimeUtil.getNow();
+      newUser.token = Util.getUUID();
+      newUser.level = '0';
+      newUser.credits = 5;
+      return User.save(newUser);
     }
     return null;
   }
@@ -202,9 +203,9 @@ export class UserService {
     const allUser = User.find();
     allUser.then((value) => {
       value.forEach((user) => {
-        if(user.level === '0'){
+        if (user.level === '0') {
           user.credits = 5;
-        }else if(user.level === '1'){
+        } else if (user.level === '1') {
           user.credits = 20;
         }
         User.save(user);
