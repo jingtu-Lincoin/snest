@@ -9,6 +9,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { GptService } from './GptService';
 import { ResultInfo } from '../../core/bean/ResultInfo';
 import { GptPo } from './GptPo';
+import { User } from "../../core/user/User";
 
 @Controller('gpt')
 export class GptController {
@@ -16,9 +17,9 @@ export class GptController {
 
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload')
-  async upload(@UploadedFile() file: Express.Multer.File, @Body() po: GptPo) {
-    console.log('po ' + JSON.stringify(po));
-    return this.gptService.upload(file, po.userId);
+  async upload(@UploadedFile() file: Express.Multer.File, @Body() user: User) {
+    console.log('po ' + JSON.stringify(user));
+    return this.gptService.upload(file, user);
   }
 
   @Post('getList')

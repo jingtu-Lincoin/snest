@@ -24,13 +24,13 @@ export class GptService {
   userService: UserService;
   async upload(
     file: Express.Multer.File,
-    userid: number,
+    user: User,
   ): Promise<UploadResult> {
     console.log('file ' + file.path + ' originalname ' + file.originalname);
     const info = new UploadResult();
     const text = await FileParser.readText(file);
     if (text) {
-      info.data = await this.saveGptRecord(userid, file, text);
+      info.data = await this.saveGptRecord(user, file, text);
     }
     return info;
   }
@@ -46,9 +46,11 @@ export class GptService {
     return gptResponse.choices.map((item) => item.message!.content).join('');
   }
 
-  private saveGptRecord(userid: number, file: Express.Multer.File, data: any) {
+  private saveGptRecord(user: User, file: Express.Multer.File, data: any) {
     const record = new GptRecord();
-    record.userId = userid;
+    record.userId = user.id;
+    record.userName = user.name;
+    record.tel = user.tel;
     record.ctime = TimeUtil.getNow();
     record.filePath = file.path;
     record.fileName = file.originalname;
