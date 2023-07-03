@@ -12,6 +12,10 @@ import { User } from './core/user/User';
 import { SmsStat } from './thirdparty/sms/core/SmsStat';
 import { Payment } from './thirdparty/payment/core/Payment';
 import { PaymentModule } from './thirdparty/payment/core/PaymentModule';
+import { OrderModule } from './module/order/OrderModule';
+import { MediaModule } from './module/media/MediaModule';
+import { Media } from './module/media/Media';
+import { Order } from './module/order/Order';
 
 @Module({
   imports: [
@@ -19,18 +23,20 @@ import { PaymentModule } from './thirdparty/payment/core/PaymentModule';
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'smartgpt',
-      password: 'smartgpt',
-      database: 'smartgpt',
+      username: 'root',
+      password: 'pass',
+      database: 'minishop',
       autoLoadEntities: true,
       synchronize: true,
-      entities: [User, GptRecord, SmsCode, SmsStat, Payment],
+      entities: [User, GptRecord, SmsCode, SmsStat, Payment, Order, Media],
     }),
     ScheduleModule.forRoot(),
     UserModule,
     GptModule,
     AuthModule,
     PaymentModule,
+    OrderModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

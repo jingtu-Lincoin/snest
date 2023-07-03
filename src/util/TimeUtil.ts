@@ -18,4 +18,13 @@ export default class TimeUtil {
 
     return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
   }
+
+  static getToday() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const date = now.getDate();
+
+    return `${year}-${month}-${date}`;
+  }
 }
