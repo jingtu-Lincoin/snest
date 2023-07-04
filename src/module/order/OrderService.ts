@@ -81,6 +81,11 @@ export class OrderService {
 
   async upload(file: Express.Multer.File, po: OrderPo) {
     const media = await this.createMedia(file, po);
+    const order = await this.get(po.id);
+    if(order){
+      order.imageCount = order.imageCount + 1;
+      Order.save(order);
+    }
     return media;
   }
 

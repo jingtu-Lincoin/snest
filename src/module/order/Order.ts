@@ -33,5 +33,7 @@ export class Order extends BaseEntity {
   sn: string; // 订单号，格式为F，每天从1开始
   @Column({ nullable: true })
   orderIndex: number; // 订单号，每天从1开始
+  @Column({ nullable: true })
+  imageCount: number; // 图片数量
 
 }
