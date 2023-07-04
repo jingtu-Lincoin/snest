@@ -1,12 +1,19 @@
-import { Body, Controller, Get, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ResultInfo } from '../../core/bean/ResultInfo';
 import { Order } from './Order';
 import { OrderService } from './OrderService';
 import { OrderPo } from './OrderPo';
-import { FileInterceptor } from "@nestjs/platform-express";
-import { GptPo } from "../gpt/GptPo";
+import { FileInterceptor } from '@nestjs/platform-express';
+import { GptPo } from '../gpt/GptPo';
 
-@Controller('order')
+@Controller('orderApi')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
   @Post('getList')
@@ -15,6 +22,20 @@ export class OrderController {
     const info = new ResultInfo();
     try {
       info.data = await this.orderService.getList(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('getUserOrders')
+  async getUserOrders(@Body() po: OrderPo): Promise<ResultInfo> {
+    console.log('po ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.orderService.getUserOrders(po);
       info.code = 200;
     } catch (e) {
       info.code = 1;
@@ -74,6 +95,7 @@ export class OrderController {
 
   @Post('createUserOrder')
   async createUserOrder(@Body() po: OrderPo): Promise<ResultInfo> {
+    console.log('po ' + JSON.stringify(po));
     const info = new ResultInfo();
     try {
       info.data = await this.orderService.createUserOrder(po);
@@ -83,5 +105,14 @@ export class OrderController {
       info.message = e.message;
     }
     return info;
+  }
+
+  @Post('archiveImages')
+  archiveImages(@Body() po: OrderPo): void {
+    try {
+      this.orderService.archiveImages(po);
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

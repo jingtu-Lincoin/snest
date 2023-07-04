@@ -16,7 +16,9 @@ export class Media extends BaseEntity {
   @Column({ nullable: true })
   name: string;
   @Column({ nullable: true })
-  path: string;
+  path: string; // 上传后的路径,相对路径
+  @Column({ nullable: true })
+  url: string; // 上传后的url，用于页面展示
   @Column({ nullable: true })
   ctime: string;
   @Column({ nullable: true })

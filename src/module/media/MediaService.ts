@@ -41,4 +41,12 @@ export class MediaService {
       },
     });
   }
+
+  async findByBid(bid: number) {
+    return Media.findOne({
+      where: {
+        bid,
+      },
+    });
+  }
 }
