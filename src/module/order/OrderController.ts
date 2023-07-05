@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   Post,
+  Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -11,9 +13,10 @@ import { Order } from './Order';
 import { OrderService } from './OrderService';
 import { OrderPo } from './OrderPo';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { GptPo } from '../gpt/GptPo';
+import * as fs from 'fs';
+import { Response } from 'express';
 
-@Controller('orderApi')
+@Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
   @Post('getList')
@@ -107,12 +110,42 @@ export class OrderController {
     return info;
   }
 
-  @Post('archiveImages')
-  archiveImages(@Body() po: OrderPo): void {
+  @Get('archiveImages')
+  async archiveImages(@Query('id') id: number, @Res() res: Response): Promise<void> {
+    console.log('id ' + id);
     try {
-      this.orderService.archiveImages(po);
+      const filePath = await this.orderService.archiveImages(id);
+      console.log('filePath ' + filePath);
+      //目前解决不了下载的问题，这里先延时处理
+      setTimeout(() => {
+        res.download(filePath, (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            fs.unlink(filePath, (err) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+          }
+        });
+      }, 3000);
     } catch (e) {
       console.log(e);
     }
+  }
+
+  @Post('updateOrderStatus')
+  async updateOrderStatus(@Body() po: OrderPo): Promise<ResultInfo> {
+    console.log('po ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.orderService.updateOrderStatus(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
   }
 }

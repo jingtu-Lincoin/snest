@@ -42,10 +42,14 @@ export class MediaService {
     });
   }
 
+  /**
+   * 根据bid查询
+   * @param bid
+   */
   async findByBid(bid: number) {
-    return Media.findOne({
+    return Media.find({
       where: {
-        bid,
+        bid: bid,
       },
     });
   }

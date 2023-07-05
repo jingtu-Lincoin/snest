@@ -22,7 +22,7 @@ export class Order extends BaseEntity {
   @Column({ nullable: true })
   ctime: string;
   @Column({ nullable: true })
-  status: string;
+  status: string; // 3未冲洗,4已冲洗
   @Column({ nullable: true })
   price: number;
   @Column({ nullable: true })

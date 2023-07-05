@@ -6,7 +6,7 @@ import Util from '../../util/Util';
 import TimeUtil from '../../util/TimeUtil';
 import { Media } from '../media/Media';
 import { MediaService } from '../media/MediaService';
-import archiver from 'archiver';
+import * as archiver from 'archiver';
 import * as fs from 'fs';
 
 @Injectable()
@@ -18,8 +18,8 @@ export class OrderService {
     page.page = po.page;
     page.pageSize = po.pageSize;
     const query = Order.createQueryBuilder('torder');
-    if (po.status) {
-      query.where('torder.status = :status', { status: po.status });
+    if (po.sn) {
+      query.where('torder.sn = :sn', { sn: po.sn });
     }
     query.skip((po.page - 1) * po.pageSize);
     query.take(po.pageSize);
@@ -82,7 +82,7 @@ export class OrderService {
   async upload(file: Express.Multer.File, po: OrderPo) {
     const media = await this.createMedia(file, po);
     const order = await this.get(po.id);
-    if(order){
+    if (order) {
       order.imageCount = order.imageCount + 1;
       Order.save(order);
     }
@@ -102,20 +102,25 @@ export class OrderService {
     return Media.save(media);
   }
 
-  archiveImages(po: OrderPo) {
-    const zipName = po.sn + '.zip';
-    const output = fs.createWriteStream(__dirname + '/tmp/' + zipName);
+  async archiveImages(id: number) {
+    const zipName = id + '.zip';
+    const zipPath = 'archive/' + zipName;
+    const output = fs.createWriteStream(zipPath);
     const archive = archiver('zip', {
       zlib: { level: 9 }, // Sets the compression level.
     });
     archive.pipe(output);
-    const medias = this.mediaService.findByBid(po.id);
-    medias.then((media) => {
-      if (media) {
-        archive.append(fs.createReadStream(media.path), { name: media.name });
-      }
-    });
-    archive.finalize();
+    const medias = await this.mediaService.findByBid(id);
+    if (medias) {
+      medias.forEach((media) => {
+        if (media) {
+          archive.append(fs.createReadStream(media.path), { name: media.name });
+        }
+      });
+      await archive.finalize();
+      return zipPath;
+    }
+    return zipPath;
   }
 
   async getUserOrders(po: OrderPo) {
@@ -123,8 +128,10 @@ export class OrderService {
     const query = Order.createQueryBuilder('torder');
     query.where('torder.tel = :tel', { tel: po.tel });
     query.andWhere('torder.name = :name', { name: po.name });
-    query.skip((po.page - 1) * po.pageSize);
-    query.take(po.pageSize);
+    query.andWhere('torder.status = :status', { status: po.status });
+    query.orderBy('torder.ctime', 'DESC');
+    // query.skip((po.page - 1) * po.pageSize);
+    // query.take(po.pageSize);
     const result = query.getManyAndCount();
     const list = await result.then((value) => {
       return value[0];
@@ -145,5 +152,13 @@ export class OrderService {
     });
     console.log('getUserTodayOrder ' + JSON.stringify(order));
     return order;
+  }
+
+  async updateOrderStatus(po: OrderPo) {
+    const order = await this.get(po.id);
+    if (order) {
+      order.status = po.status;
+      return Order.save(order);
+    }
   }
 }
