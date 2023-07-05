@@ -19,12 +19,23 @@ import { Order } from './module/order/Order';
 
 @Module({
   imports: [
+    // TypeOrmModule.forRoot({
+    //   type: 'mysql',
+    //   host: 'localhost',
+    //   port: 3306,
+    //   username: 'root',
+    //   password: 'pass',
+    //   database: 'minishop',
+    //   autoLoadEntities: true,
+    //   synchronize: true,
+    //   entities: [User, GptRecord, SmsCode, SmsStat, Payment, Order, Media],
+    // }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'root',
-      password: 'pass',
+      username: 'minishop',
+      password: 'minishop',
       database: 'minishop',
       autoLoadEntities: true,
       synchronize: true,
