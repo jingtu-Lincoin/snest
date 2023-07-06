@@ -40,7 +40,7 @@
     "nuid": "^1.1.6",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "pdfjs-dist": "^3.7.107",
+    "pdfjs-dist": "^2.10.377",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "tencentcloud-sdk-nodejs": "^4.0.629",
