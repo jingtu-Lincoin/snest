@@ -3,7 +3,7 @@ import { UserService } from './UserService';
 import { User } from './User';
 import { UserPo } from './UserPo';
 import { ResultInfo } from '../../core/bean/ResultInfo';
-import { AlipayCallbackBean } from "../../thirdparty/payment/alipay/bean/AlipayCallbackBean";
+import { AlipayCallbackBean } from '../../thirdparty/payment/alipay/bean/AlipayCallbackBean';
 
 @Controller('user')
 export class UserController {
@@ -135,17 +135,14 @@ export class UserController {
   }
 
   @Post('zfbCallback')
-  async zfbCallback(@Body() po: AlipayCallbackBean): Promise<ResultInfo> {
-    console.log('user ' + JSON.stringify(po));
-    const info = new ResultInfo();
+  async zfbCallback(@Body() po: AlipayCallbackBean): Promise<string> {
+    console.log('zfbCallback po ' + JSON.stringify(po));
     try {
-      info.data = await this.userService.zfbCallback(po);
-      info.code = 200;
+      return await this.userService.zfbCallback(po);
     } catch (e) {
-      info.code = 1;
-      info.message = e.message;
+      console.log(e.message);
     }
-    return info;
+    return 'fail';
   }
 
   @Post('weixinLogin')

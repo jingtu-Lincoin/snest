@@ -141,7 +141,7 @@ export class UserService {
 
   async zfbCallback(po: AlipayCallbackBean) {
     const payment = await this.paymentService.getByOutTradeNo(po.out_trade_no);
-    if (payment) {
+    if (payment && payment.payStatus === '1') {
       payment.payStatus = '2';
       payment.payTime = TimeUtil.getNow();
       this.paymentService.add(payment);
@@ -152,7 +152,9 @@ export class UserService {
         user.rechargeCount += 1;
         User.save(user);
       }
+      return 'success';
     }
+    return 'fail';
   }
 
   private createPayment(
