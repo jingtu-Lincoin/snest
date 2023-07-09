@@ -14,9 +14,11 @@ export class Order extends BaseEntity {
   @Column({ nullable: true })
   userId: number;
   @Column({ nullable: true })
-  name: string;
+  userName: string;
   @Column({ nullable: true })
   tel: string;
+  @Column({ nullable: true })
+  name: string; //订单名称
   @Column({ nullable: true })
   topImage: string;
   @Column({ nullable: true })
@@ -35,5 +37,4 @@ export class Order extends BaseEntity {
   orderIndex: number; // 订单号，每天从1开始
   @Column({ nullable: true })
   imageCount: number; // 图片数量
-
 }

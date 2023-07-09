@@ -13,8 +13,11 @@ export class MediaService {
     page.page = po.page;
     page.pageSize = po.pageSize;
     const query = Media.createQueryBuilder('media');
-    if (po.name) {
-      query.where('media.name like :name', { name: `%${po.name}%` });
+    if (po.userName) {
+      query.where('media.userName like :userName', { userName: `%${po.userName}%` });
+    }
+    if (po.bname) {
+      query.where('media.bname like :bname', { bname: `%${po.bname}%` });
     }
     query.skip((po.page - 1) * po.pageSize);
     query.take(po.pageSize);

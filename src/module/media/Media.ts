@@ -14,6 +14,8 @@ export class Media extends BaseEntity {
   @Column({ nullable: true })
   userId: number;
   @Column({ nullable: true })
+  userName: string;
+  @Column({ nullable: true })
   name: string;
   @Column({ nullable: true })
   path: string; // 上传后的路径,相对路径

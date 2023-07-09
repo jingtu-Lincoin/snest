@@ -114,22 +114,24 @@ export class OrderController {
   async archiveImages(@Query('id') id: number, @Res() res: Response): Promise<void> {
     console.log('id ' + id);
     try {
-      const filePath = await this.orderService.archiveImages(id);
-      console.log('filePath ' + filePath);
-      //目前解决不了下载的问题，这里先延时处理
-      setTimeout(() => {
-        res.download(filePath, (err) => {
-          if (err) {
-            console.log(err);
-          } else {
-            fs.unlink(filePath, (err) => {
-              if (err) {
-                console.log(err);
-              }
-            });
-          }
-        });
-      }, 3000);
+      // const filePath = await this.orderService.archiveImages(id);
+      // console.log('filePath ' + filePath);
+      // //目前解决不了下载的问题，这里先延时处理
+      // setTimeout(() => {
+      //   res.download(filePath, (err) => {
+      //     if (err) {
+      //       console.log(err);
+      //     } else {
+      //       fs.unlink(filePath, (err) => {
+      //         if (err) {
+      //           console.log(err);
+      //         }
+      //       });
+      //     }
+      //   });
+      // }, 3000);
+      const archiver = await this.orderService.archiveImagesNew(id);
+      archiver!.pipe(res);
     } catch (e) {
       console.log(e);
     }

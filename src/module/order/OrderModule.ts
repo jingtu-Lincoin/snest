@@ -8,7 +8,7 @@ import { diskStorage } from 'multer';
 import * as nuid from 'nuid';
 import dayjs = require('dayjs');
 import * as process from 'process';
-const uploadPath = 'upload';
+const uploadPath = 'public/upload';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order]),

@@ -8,6 +8,7 @@ import { Media } from '../media/Media';
 import { MediaService } from '../media/MediaService';
 import * as archiver from 'archiver';
 import * as fs from 'fs';
+import * as process from 'process';
 
 @Injectable()
 export class OrderService {
@@ -54,7 +55,7 @@ export class OrderService {
     }
     const orderIndex = await this.getTodayMaxOrderIndex();
     const order = new Order();
-    order.name = po.name;
+    order.userName = po.userName;
     order.tel = po.tel;
     order.sn = 'F' + orderIndex;
     order.orderIndex = orderIndex;
@@ -80,25 +81,31 @@ export class OrderService {
   }
 
   async upload(file: Express.Multer.File, po: OrderPo) {
-    const media = await this.createMedia(file, po);
+    let media = null;
     const order = await this.get(po.id);
     if (order) {
+      media = await this.createMedia(file, order);
       order.imageCount = order.imageCount + 1;
       Order.save(order);
     }
     return media;
   }
 
-  private createMedia(file: Express.Multer.File, po: OrderPo) {
+  private createMedia(file: Express.Multer.File, order: Order) {
+    const httpUrl = process.env.FILE_UPLAD_URL;
     const media = new Media();
+    media.userId = order.userId;
+    media.userName = order.userName;
     media.name = file.originalname;
     media.size = file.size;
     media.type = file.mimetype;
     media.ctime = TimeUtil.getNow();
     media.path = file.path;
-    media.bid = po.id;
+    media.url = httpUrl + file.path;
+    media.url = media.url.replace('/public', ''); // 去掉/public
+    media.bid = order.id;
     media.bcode = 'order';
-    media.bname = '订单';
+    media.bname = order.sn;
     return Media.save(media);
   }
 
@@ -121,6 +128,22 @@ export class OrderService {
       return zipPath;
     }
     return zipPath;
+  }
+
+  async archiveImagesNew(id: number) {
+    const archive = archiver('zip', {
+      zlib: { level: 9 }, // Sets the compression level.
+    });
+    const medias = await this.mediaService.findByBid(id);
+    if (medias) {
+      medias.forEach((media) => {
+        if (media) {
+          archive.append(fs.createReadStream(media.path), { name: media.name });
+        }
+      });
+      archive.finalize();
+      return archive;
+    }
   }
 
   async getUserOrders(po: OrderPo) {

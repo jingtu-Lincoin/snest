@@ -16,6 +16,8 @@ import { OrderModule } from './module/order/OrderModule';
 import { MediaModule } from './module/media/MediaModule';
 import { Media } from './module/media/Media';
 import { Order } from './module/order/Order';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -42,6 +44,10 @@ import { Order } from './module/order/Order';
     //   entities: [User, GptRecord, SmsCode, SmsStat, Payment, Order, Media],
     // }),
     ScheduleModule.forRoot(),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/src/(.*)'],
+    }),
     UserModule,
     GptModule,
     AuthModule,
