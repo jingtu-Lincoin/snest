@@ -57,6 +57,7 @@ export class OrderService {
     const order = new Order();
     order.userName = po.userName;
     order.tel = po.tel;
+    order.status = "3";
     order.sn = 'F' + orderIndex;
     order.orderIndex = orderIndex;
     order.ctime = TimeUtil.getNow();
@@ -150,7 +151,7 @@ export class OrderService {
     console.log('po ' + JSON.stringify(po));
     const query = Order.createQueryBuilder('torder');
     query.where('torder.tel = :tel', { tel: po.tel });
-    query.andWhere('torder.name = :name', { name: po.name });
+    query.andWhere('torder.userName = :userName', { userName: po.userName });
     query.andWhere('torder.status = :status', { status: po.status });
     query.orderBy('torder.ctime', 'DESC');
     // query.skip((po.page - 1) * po.pageSize);
@@ -166,7 +167,7 @@ export class OrderService {
     const today = TimeUtil.getToday();
     const query = Order.createQueryBuilder('torder');
     query.where('torder.tel = :tel', { tel: po.tel });
-    query.andWhere('torder.name = :name', { name: po.name });
+    query.andWhere('torder.userName = :userName', { userName: po.userName });
     query.andWhere('torder.day = :today', { today: today });
     console.log('getUserTodayOrder ' + query.getSql());
     const result = query.getOne();

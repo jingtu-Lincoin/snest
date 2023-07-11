@@ -15,7 +15,7 @@ const uploadPath = 'public/upload';
     MulterModule.register({
       storage: diskStorage({
         // 配置文件上传后的文件夹路径
-        destination: uploadPath + `/${dayjs().format('YYYY-MM-DD')}`,
+        destination: uploadPath + `/${dayjs().format('YYYYMMDD')}`,
         filename: (req, file, cb) => {
           // 在此处自定义保存后的文件名称
           const filename = `${nuid.next()}.${file.mimetype.split('/')[1]}`;
