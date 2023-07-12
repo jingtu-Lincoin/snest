@@ -111,26 +111,12 @@ export class OrderController {
   }
 
   @Get('archiveImages')
-  async archiveImages(@Query('id') id: number, @Res() res: Response): Promise<void> {
+  async archiveImages(@Query('id') id: number,@Query('userName') userName: string,@Query('tel') tel: string, @Res() res: Response): Promise<void> {
     console.log('id ' + id);
     try {
-      // const filePath = await this.orderService.archiveImages(id);
-      // console.log('filePath ' + filePath);
-      // //目前解决不了下载的问题，这里先延时处理
-      // setTimeout(() => {
-      //   res.download(filePath, (err) => {
-      //     if (err) {
-      //       console.log(err);
-      //     } else {
-      //       fs.unlink(filePath, (err) => {
-      //         if (err) {
-      //           console.log(err);
-      //         }
-      //       });
-      //     }
-      //   });
-      // }, 3000);
+      const zipName = userName + '_' + tel + '.zip';
       const archiver = await this.orderService.archiveImagesNew(id);
+      res.attachment(zipName);
       archiver!.pipe(res);
     } catch (e) {
       console.log(e);
