@@ -19,6 +19,9 @@ export class MediaService {
     if (po.bname) {
       query.where('media.bname like :bname', { bname: `%${po.bname}%` });
     }
+    if (po.bid) {
+      query.where('media.bid = :bid', { bid: `${po.bid}` });
+    }
     query.skip((po.page - 1) * po.pageSize);
     query.take(po.pageSize);
     const result = query.getManyAndCount();
