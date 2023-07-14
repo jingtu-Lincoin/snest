@@ -185,4 +185,16 @@ export class OrderService {
       return Order.save(order);
     }
   }
+
+  /**
+   * 更新订单图片数量
+   * @param id
+   */
+  async updateMediaCount(id: number, count: number) {
+    const order = await this.get(id);
+    if (order) {
+      order.imageCount += count
+      Order.save(order);
+    }
+  }
 }

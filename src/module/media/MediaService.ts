@@ -4,6 +4,7 @@ import { MediaPo } from './MediaPo';
 import { Page } from '../../core/bean/Page';
 import Util from '../../util/Util';
 import TimeUtil from '../../util/TimeUtil';
+import { OrderService } from "../order/OrderService";
 
 @Injectable()
 export class MediaService {
@@ -36,8 +37,15 @@ export class MediaService {
     media.ctime = TimeUtil.getNow();
     return Media.save(media);
   }
-  remove(id: number) {
-    return Media.delete(id);
+  async remove(id: number) {
+    const media = await this.get(id);
+    if(media){
+      const orderService = new OrderService();
+      orderService.updateMediaCount(media.bid,-1);
+      await media.remove();
+      return true;
+    }
+    return false;
   }
 
   async get(id: number) {
