@@ -1,11 +1,31 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Payment } from './Payment';
 import { AlipayCallbackBean } from '../alipay/bean/AlipayCallbackBean';
+import { PaymentPo } from './PaymentPo';
+import { Page } from '../../../core/bean/Page';
+import Util from '../../../util/Util';
 
 @Injectable()
 export class PaymentService {
-  getList(): Promise<Array<Payment>> {
-    return Payment.find();
+  async getList(po: PaymentPo): Promise<Page> {
+    console.log('po ' + JSON.stringify(po));
+    const page = new Page();
+    page.page = po.page;
+    page.pageSize = po.pageSize;
+    const query = Payment.createQueryBuilder('payment');
+    if (po.outTradeNo) {
+      query.where('payment.outTradeNo like :outTradeNo', {
+        outTradeNo: `%${po.outTradeNo}%`,
+      });
+    }
+    query.skip((po.page - 1) * po.pageSize);
+    query.take(po.pageSize);
+    const result = query.getManyAndCount();
+    await result.then((value) => {
+      page.list = value[0];
+      page.pageCount = Util.getPageCount(value[1], po.pageSize);
+    });
+    return page;
   }
 
   add(payment: Payment) {
@@ -27,5 +47,19 @@ export class PaymentService {
       }
     }
     return 'success';
+  }
+
+  async getByOutTradeNo(out_trade_no: string) {
+    return Payment.findOne({
+      where: { outTradeNo: out_trade_no },
+    });
+  }
+
+  async get(id: number) {
+    return Payment.findOne({
+      where: {
+        id: id,
+      },
+    });
   }
 }

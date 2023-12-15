@@ -8,22 +8,22 @@ import {
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 
 /**
- * 通用的短信发送统计表
+ * 通用的短信验证码表
  */
-@Entity('t_sms_stat')
-export class User extends BaseEntity {
+@Entity('t_sms_code')
+export class SmsCode extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
   tel: string;
   /**
-   * 发送场景,1注册，2验证密码
+   * 验证码
    */
   @Column()
-  sense: number;
+  code: string;
   /**
-   * 发送日期
+   * 发送时间
    */
   @Column()
-  day: string;
+  ctime: string;
 }

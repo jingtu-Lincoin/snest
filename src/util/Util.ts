@@ -5,7 +5,7 @@ export default class Util {
    * @param item  the item to be removed
    * @param field   the field of the item to be compared
    */
-  arrRemove(arr: any[], item: any, field: string) {
+  static arrRemove(arr: any[], item: any, field: string) {
     arr.map((i: any) => {
       if (i[field] === item[field]) {
         arr.splice(arr.indexOf(i), 1);
@@ -54,5 +54,31 @@ export default class Util {
 
   static getPageCount(total: number, pageSize: number) {
     return Math.ceil(total / pageSize);
+  }
+
+  static getUUID() {
+    return (
+      new Date().getTime() +
+      Math.random().toString(36).substr(3, 10) +
+      Math.random().toString(36).substr(3, 10)
+    );
+  }
+
+  /**
+   * 给url拼接参数
+   * @param url
+   * @param params
+   */
+  static spliceUrlParams(url: string, params: any) {
+    const keys = Object.keys(params);
+    let result = url;
+    keys.map((key, index) => {
+      if (index === 0) {
+        result += `?${key}=${params[key]}`;
+      } else {
+        result += `&${key}=${params[key]}`;
+      }
+    });
+    return result;
   }
 }
