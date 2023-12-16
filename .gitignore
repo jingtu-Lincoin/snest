@@ -38,5 +38,4 @@ lerna-debug.log*
 .env
 
 #upload
-/public/upload
-/upload
+public/upload
