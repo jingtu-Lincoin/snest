@@ -18,6 +18,16 @@ import { Media } from './module/media/Media';
 import { Order } from './module/order/Order';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { StudentModule } from './module/student/StudentModule';
+import { TeacherModule } from './module/teacher/TeacherModule';
+import { AppointModule } from './module/appoint/AppointModule';
+import { ArticleModule } from './module/article/ArticleModule';
+import { MessageBoardModule } from './module/messageBoard/MessageBoardModule';
+import { Student } from './module/student/Student';
+import { Teacher } from './module/teacher/Teacher';
+import { Article } from './module/article/Article';
+import { Appoint } from './module/appoint/Appoint';
+import { MessageBoard } from './module/messageBoard/MessageBoard';
 
 @Module({
   imports: [
@@ -30,7 +40,7 @@ import { join } from 'path';
       database: 'minishop',
       autoLoadEntities: true,
       synchronize: true,
-      entities: [User, GptRecord, SmsCode, SmsStat, Payment, Order, Media],
+      entities: [User, Student, Teacher, Article, Appoint, MessageBoard],
     }),
     ScheduleModule.forRoot(),
     ServeStaticModule.forRoot({
@@ -38,11 +48,12 @@ import { join } from 'path';
       exclude: ['/src/(.*)'],
     }),
     UserModule,
-    GptModule,
     AuthModule,
-    PaymentModule,
-    OrderModule,
-    MediaModule,
+    StudentModule,
+    TeacherModule,
+    AppointModule,
+    ArticleModule,
+    MessageBoardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
