@@ -28,6 +28,7 @@ export class MessageBoardService {
 
   add(order: MessageBoard) {
     order.ctime = TimeUtil.getNow();
+    order.status="2";
     return MessageBoard.save(order);
   }
   remove(id: number) {

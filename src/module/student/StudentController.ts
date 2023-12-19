@@ -13,10 +13,10 @@ import { StudentService } from './StudentService';
 import { Student } from './Student';
 import { StudentPo } from './StudentPo';
 
-@Controller('student')
+@Controller('studentApi')
 export class StudentController {
   constructor(private readonly studentService: StudentService) {}
-  @Post('getList')
+  @Post('getPageList')
   async getList(@Body() po: StudentPo): Promise<ResultInfo> {
     console.log('po ' + JSON.stringify(po));
     const info = new ResultInfo();

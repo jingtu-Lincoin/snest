@@ -3,19 +3,9 @@ import { AppController } from './module/app/AppController';
 import { AppService } from './module/app/AppService';
 import { UserModule } from './core/user/UserModule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GptModule } from './module/gpt/GptModule';
 import { AuthModule } from './core/auth/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { GptRecord } from './module/gpt/GptRecord';
-import { SmsCode } from './thirdparty/sms/core/SmsCode';
 import { User } from './core/user/User';
-import { SmsStat } from './thirdparty/sms/core/SmsStat';
-import { Payment } from './thirdparty/payment/core/Payment';
-import { PaymentModule } from './thirdparty/payment/core/PaymentModule';
-import { OrderModule } from './module/order/OrderModule';
-import { MediaModule } from './module/media/MediaModule';
-import { Media } from './module/media/Media';
-import { Order } from './module/order/Order';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { StudentModule } from './module/student/StudentModule';
@@ -28,6 +18,7 @@ import { Teacher } from './module/teacher/Teacher';
 import { Article } from './module/article/Article';
 import { Appoint } from './module/appoint/Appoint';
 import { MessageBoard } from './module/messageBoard/MessageBoard';
+import { ArticleTypeModule } from "./module/article/ArticleTypeModule";
 
 @Module({
   imports: [
@@ -37,7 +28,7 @@ import { MessageBoard } from './module/messageBoard/MessageBoard';
       port: 3306,
       username: 'root',
       password: 'pass',
-      database: 'minishop',
+      database: 'psy',
       autoLoadEntities: true,
       synchronize: true,
       entities: [User, Student, Teacher, Article, Appoint, MessageBoard],
@@ -54,6 +45,7 @@ import { MessageBoard } from './module/messageBoard/MessageBoard';
     AppointModule,
     ArticleModule,
     MessageBoardModule,
+    ArticleTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

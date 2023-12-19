@@ -16,9 +16,15 @@ export class MessageBoard extends BaseEntity {
   @Column({ nullable: true })
   tel: string;
   @Column({ nullable: true })
-  topImage: string;
+  userHead: string;
   @Column({ nullable: true })
   ctime: string;
   @Column({ nullable: true })
-  status: string; // 3未冲洗,4已冲洗
+  title: string;
+  @Column({ nullable: true })
+  content: string;
+  @Column({ nullable: true })
+  status: string; //1已回复 2未回复
+  @Column({ nullable: true })
+  replyContent: string;
 }

@@ -16,9 +16,11 @@ export class Student extends BaseEntity {
   @Column({ nullable: true })
   tel: string;
   @Column({ nullable: true })
-  topImage: string;
+  code: string;
+  @Column({ nullable: true })
+  userHead: string;
   @Column({ nullable: true })
   ctime: string;
   @Column({ nullable: true })
-  status: string; // 3未冲洗,4已冲洗
+  password: string;
 }

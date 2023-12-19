@@ -12,9 +12,9 @@ export class ArticleService {
     const page = new Page();
     page.page = po.page;
     page.pageSize = po.pageSize;
-    const query = Article.createQueryBuilder('Article');
+    const query = Article.createQueryBuilder('article');
     if (po.name) {
-      query.where('user.name like :name', { name: `%${po.name}%` });
+      query.where('article.title like :title', { name: `%${po.title}%` });
     }
     query.skip((po.page - 1) * po.pageSize);
     query.take(po.pageSize);

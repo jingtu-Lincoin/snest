@@ -14,11 +14,16 @@ export class Teacher extends BaseEntity {
   @Column({ nullable: true })
   name: string;
   @Column({ nullable: true })
-  tel: string;
+  phone: string;
   @Column({ nullable: true })
-  topImage: string;
+  userHead: string;
   @Column({ nullable: true })
   ctime: string;
   @Column({ nullable: true })
-  status: string; //
+  des: string; //介绍
+  @Column({ nullable: true })
+  department: string; //部门
+  @Column({ nullable: true })
+  code: string; //工号
+
 }

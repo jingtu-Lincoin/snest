@@ -13,10 +13,10 @@ import { ArticleService } from './ArticleService';
 import { Article } from './Article';
 import { ArticlePo } from './ArticlePo';
 
-@Controller('Article')
+@Controller('articleApi')
 export class ArticleController {
   constructor(private readonly ArticleService: ArticleService) {}
-  @Post('getList')
+  @Post('getPageList')
   async getList(@Body() po: ArticlePo): Promise<ResultInfo> {
     console.log('po ' + JSON.stringify(po));
     const info = new ResultInfo();

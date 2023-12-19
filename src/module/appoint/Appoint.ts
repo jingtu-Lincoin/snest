@@ -16,9 +16,15 @@ export class Appoint extends BaseEntity {
   @Column({ nullable: true })
   tel: string;
   @Column({ nullable: true })
-  topImage: string;
+  userHead: string;
   @Column({ nullable: true })
   ctime: string;
+  @Column({ nullable: true})
+  teacherId: string;
+  @Column({ nullable: true})
+  teacherName: string;
   @Column({ nullable: true })
-  status: string; // 3未冲洗,4已冲洗
+  teacherHead: string;
+  @Column({ nullable: true })
+  appointTime: string;
 }

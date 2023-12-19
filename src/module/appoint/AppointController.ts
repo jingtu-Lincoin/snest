@@ -13,10 +13,10 @@ import { AppointService } from './AppointService';
 import { Appoint } from './Appoint';
 import { AppointPo } from './AppointPo';
 
-@Controller('Appoint')
+@Controller('appointApi')
 export class AppointController {
   constructor(private readonly AppointService: AppointService) {}
-  @Post('getList')
+  @Post('getPageList')
   async getList(@Body() po: AppointPo): Promise<ResultInfo> {
     console.log('po ' + JSON.stringify(po));
     const info = new ResultInfo();

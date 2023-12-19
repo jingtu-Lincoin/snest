@@ -13,10 +13,10 @@ import { MessageBoardService } from './MessageBoardService';
 import { MessageBoard } from './MessageBoard';
 import { MessageBoardPo } from './MessageBoardPo';
 
-@Controller('MessageBoard')
+@Controller('messageBoardApi')
 export class MessageBoardController {
   constructor(private readonly MessageBoardService: MessageBoardService) {}
-  @Post('getList')
+  @Post('getPageList')
   async getList(@Body() po: MessageBoardPo): Promise<ResultInfo> {
     console.log('po ' + JSON.stringify(po));
     const info = new ResultInfo();
