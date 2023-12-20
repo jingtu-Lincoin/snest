@@ -28,7 +28,7 @@ export class MessageBoardService {
 
   add(order: MessageBoard) {
     order.ctime = TimeUtil.getNow();
-    order.status="2";
+    order.status = '2';
     return MessageBoard.save(order);
   }
   remove(id: number) {
@@ -41,5 +41,14 @@ export class MessageBoardService {
         id: id,
       },
     });
+  }
+
+  async reply(po: MessageBoardPo) {
+    const message = await this.get(po.id);
+    if (message) {
+      message.replyContent = po.replyContent;
+      message.status = '1';
+      return MessageBoard.save(message);
+    }
   }
 }

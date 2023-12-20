@@ -12,4 +12,6 @@ export class ArticleType extends BaseEntity {
   id: number;
   @Column({ nullable: true })
   name: string;
+  @Column({ nullable: true })
+  code: string;
 }

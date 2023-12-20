@@ -15,13 +15,13 @@ import { MessageBoardPo } from './MessageBoardPo';
 
 @Controller('messageBoardApi')
 export class MessageBoardController {
-  constructor(private readonly MessageBoardService: MessageBoardService) {}
+  constructor(private readonly messageBoardService: MessageBoardService) {}
   @Post('getPageList')
   async getList(@Body() po: MessageBoardPo): Promise<ResultInfo> {
     console.log('po ' + JSON.stringify(po));
     const info = new ResultInfo();
     try {
-      info.data = await this.MessageBoardService.getList(po);
+      info.data = await this.messageBoardService.getList(po);
       info.code = 200;
     } catch (e) {
       info.code = 1;
@@ -35,7 +35,7 @@ export class MessageBoardController {
     console.log('order ' + JSON.stringify(MessageBoard));
     const info = new ResultInfo();
     try {
-      info.data = await this.MessageBoardService.add(MessageBoard);
+      info.data = await this.messageBoardService.add(MessageBoard);
       info.code = 200;
     } catch (e) {
       info.code = 1;
@@ -44,12 +44,12 @@ export class MessageBoardController {
     return info;
   }
 
-  @Post('remove')
-  async remove(@Body() MessageBoard: MessageBoard): Promise<ResultInfo> {
-    console.log('order ' + JSON.stringify(MessageBoard));
+  @Post('operate')
+  async remove(@Body() po: MessageBoardPo): Promise<ResultInfo> {
+    console.log('order ' + JSON.stringify(po));
     const info = new ResultInfo();
     try {
-      info.data = await this.MessageBoardService.remove(MessageBoard.id);
+      info.data = await this.messageBoardService.remove(po.id);
       info.code = 200;
     } catch (e) {
       info.code = 1;
@@ -59,11 +59,25 @@ export class MessageBoardController {
   }
 
   @Post('detail')
-  async detail(@Body() MessageBoard: MessageBoard): Promise<ResultInfo> {
+  async detail(@Body() po: MessageBoardPo): Promise<ResultInfo> {
     console.log('order ' + JSON.stringify(MessageBoard));
     const info = new ResultInfo();
     try {
-      info.data = await this.MessageBoardService.get(MessageBoard.id);
+      info.data = await this.messageBoardService.get(po.id);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('reply')
+  async reply(@Body() po: MessageBoardPo): Promise<ResultInfo> {
+    console.log('order ' + JSON.stringify(MessageBoard));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.messageBoardService.reply(po);
       info.code = 200;
     } catch (e) {
       info.code = 1;

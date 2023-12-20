@@ -7,7 +7,7 @@ import { ArticleType } from './ArticleType';
 
 @Injectable()
 export class ArticleTypeService {
-  async getList(po: ArticleTypePo): Promise<Page> {
+  async getPageList(po: ArticleTypePo): Promise<Page> {
     console.log('po ' + JSON.stringify(po));
     const page = new Page();
     page.page = po.page;
@@ -24,6 +24,20 @@ export class ArticleTypeService {
       page.pageCount = Util.getPageCount(value[1], po.pageSize);
     });
     return page;
+  }
+
+  async getList(po: ArticleTypePo): Promise<ArticleType[]> {
+    console.log('po ' + JSON.stringify(po));
+    let list: ArticleType[] = [];
+    const query = ArticleType.createQueryBuilder('articleType');
+    if (po.name) {
+      query.where('articleType.name like :name', { name: `%${po.name}%` });
+    }
+    const result = query.getManyAndCount();
+    await result.then((value) => {
+      list = value[0];
+    });
+    return list;
   }
 
   add(order: ArticleType) {

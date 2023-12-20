@@ -8,7 +8,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './FileService';
 
 @Controller('file')
-class FileController {
+export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @UseInterceptors(FileInterceptor('file'))

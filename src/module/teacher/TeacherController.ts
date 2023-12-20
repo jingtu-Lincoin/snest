@@ -44,7 +44,7 @@ export class TeacherController {
     return info;
   }
 
-  @Post('remove')
+  @Post('operate')
   async remove(@Body() Teacher: Teacher): Promise<ResultInfo> {
     console.log('order ' + JSON.stringify(Teacher));
     const info = new ResultInfo();

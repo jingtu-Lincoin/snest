@@ -18,7 +18,9 @@ import { Teacher } from './module/teacher/Teacher';
 import { Article } from './module/article/Article';
 import { Appoint } from './module/appoint/Appoint';
 import { MessageBoard } from './module/messageBoard/MessageBoard';
-import { ArticleTypeModule } from "./module/article/ArticleTypeModule";
+import { ArticleTypeModule } from './module/article/ArticleTypeModule';
+import { FileService } from './module/app/FileService';
+import { FileController } from './module/app/FileController';
 
 @Module({
   imports: [
@@ -47,7 +49,7 @@ import { ArticleTypeModule } from "./module/article/ArticleTypeModule";
     MessageBoardModule,
     ArticleTypeModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, FileController],
+  providers: [AppService, FileService],
 })
 export class AppModule {}
