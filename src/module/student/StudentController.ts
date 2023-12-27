@@ -71,4 +71,45 @@ export class StudentController {
     }
     return info;
   }
+
+  @Post('login')
+  async login(@Body() student: Student): Promise<ResultInfo> {
+    console.log('order ' + JSON.stringify(student));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.studentService.login(student);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('changePassword')
+  async changePassword(@Body() po: StudentPo): Promise<ResultInfo> {
+    console.log('order ' + JSON.stringify(po));
+    let info = new ResultInfo();
+    try {
+      info = await this.studentService.changePassword(po);
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('updateHead')
+  async updateHead(@Body() po: StudentPo): Promise<ResultInfo> {
+    console.log('order ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.studentService.updateHead(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
 }

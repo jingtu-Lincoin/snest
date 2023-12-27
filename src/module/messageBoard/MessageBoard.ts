@@ -14,6 +14,8 @@ export class MessageBoard extends BaseEntity {
   @Column({ nullable: true })
   name: string;
   @Column({ nullable: true })
+  code: string;
+  @Column({ nullable: true })
   tel: string;
   @Column({ nullable: true })
   userHead: string;

@@ -4,9 +4,13 @@ import Util from '../../util/Util';
 import TimeUtil from '../../util/TimeUtil';
 import { ArticlePo } from './ArticlePo';
 import { Article } from './Article';
+import { ArticleTypeService } from './ArticleTypeService';
 
 @Injectable()
 export class ArticleService {
+  @Inject()
+  articleTypeService: ArticleTypeService;
+
   async getList(po: ArticlePo): Promise<Page> {
     console.log('po ' + JSON.stringify(po));
     const page = new Page();
@@ -40,5 +44,24 @@ export class ArticleService {
         id: id,
       },
     });
+  }
+
+  async getListWithType(po: ArticlePo) {
+    const articlePo = new ArticlePo();
+    articlePo.page = 1;
+    articlePo.pageSize = 100;
+    const typeList = await this.articleTypeService.getList(articlePo);
+    for (const type of typeList) {
+      const articles = await this.getListByType(type.id);
+      type.articles = articles;
+    }
+    return typeList;
+  }
+
+  async getListByType(id: number) {
+    const query = Article.createQueryBuilder('article');
+    query.where('article.type = :type', { type: id });
+    const result = query.getMany();
+    return result;
   }
 }

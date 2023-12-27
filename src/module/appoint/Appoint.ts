@@ -12,19 +12,23 @@ export class Appoint extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column({ nullable: true })
-  name: string;
+  studentId: number;
   @Column({ nullable: true })
-  tel: string;
+  studentName: string;
   @Column({ nullable: true })
-  userHead: string;
+  studentPhone: string;
+  @Column({ nullable: true })
+  studentHead: string;
   @Column({ nullable: true })
   ctime: string;
   @Column({ nullable: true})
-  teacherId: string;
+  teacherId: number;
   @Column({ nullable: true})
   teacherName: string;
   @Column({ nullable: true })
   teacherHead: string;
   @Column({ nullable: true })
-  appointTime: string;
+  appointDate: string;
+  @Column({ nullable: true })
+  appointType: string;
 }

@@ -17,11 +17,25 @@ import { ArticlePo } from './ArticlePo';
 export class ArticleController {
   constructor(private readonly ArticleService: ArticleService) {}
   @Post('getPageList')
-  async getList(@Body() po: ArticlePo): Promise<ResultInfo> {
+  async getPageList(@Body() po: ArticlePo): Promise<ResultInfo> {
     console.log('po ' + JSON.stringify(po));
     const info = new ResultInfo();
     try {
       info.data = await this.ArticleService.getList(po);
+      info.code = 200;
+    } catch (e) {
+      info.code = 1;
+      info.message = e.message;
+    }
+    return info;
+  }
+
+  @Post('getListWithType')
+  async getListWithType(@Body() po: ArticlePo): Promise<ResultInfo> {
+    console.log('po ' + JSON.stringify(po));
+    const info = new ResultInfo();
+    try {
+      info.data = await this.ArticleService.getListWithType(po);
       info.code = 200;
     } catch (e) {
       info.code = 1;

@@ -51,4 +51,5 @@ export class MessageBoardService {
       return MessageBoard.save(message);
     }
   }
+
 }

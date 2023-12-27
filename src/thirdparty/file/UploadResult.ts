@@ -1,6 +1,10 @@
 export default class UploadResult {
-  success: boolean;
-  message: string;
-  fileUrl: string;
-  data: any;
+  path = '';
+  size = 0;
+  type = '';
+  name = '';
+  realName = '';
+  data: any = null;
+  localPath = '';
+  uploader = '';
 }

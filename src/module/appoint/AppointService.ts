@@ -41,4 +41,14 @@ export class AppointService {
       },
     });
   }
+
+  async getUserAppoints(po: AppointPo) {
+    const query = Appoint.createQueryBuilder('appoint');
+    query.where('appoint.studentId = :studentId', { studentId: po.studentId });
+    return query.getMany();
+  }
+
+  async getAllCount() {
+    return Appoint.count();
+  }
 }

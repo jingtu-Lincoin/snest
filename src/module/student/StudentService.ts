@@ -4,6 +4,7 @@ import Util from '../../util/Util';
 import TimeUtil from '../../util/TimeUtil';
 import { StudentPo } from './StudentPo';
 import { Student } from './Student';
+import { ResultInfo } from '../../core/bean/ResultInfo';
 
 @Injectable()
 export class StudentService {
@@ -40,5 +41,42 @@ export class StudentService {
         id: id,
       },
     });
+  }
+
+  async login(student: Student) {
+    const query = Student.createQueryBuilder('student');
+    query.where('student.code = :code', { code: student.code });
+    query.andWhere('student.password = :password', {
+      password: student.password,
+    });
+    const result = query.getOne();
+    return result;
+  }
+
+  async changePassword(po: StudentPo) {
+    const info = new ResultInfo();
+    const student = await this.get(po.id);
+    if (student != null) {
+      if (student.password != po.oldPassword) {
+        info.message = '原密码错误';
+      } else {
+        student.password = po.newPassword;
+        info.data = await this.add(student);
+      }
+    }
+    return info;
+  }
+
+  async updateHead(po: StudentPo) {
+    const student = await this.get(po.id);
+    if (student != null) {
+      student.userHead = po.userHead;
+      await this.add(student);
+    }
+    return student;
+  }
+
+  async getAllCount() {
+    return Student.count();
   }
 }

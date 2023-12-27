@@ -41,4 +41,8 @@ export class TeacherService {
       },
     });
   }
+
+  async getAllCount() {
+    return Teacher.count();
+  }
 }
